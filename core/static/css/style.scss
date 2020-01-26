@@ -1,0 +1,292 @@
+@import "reset.css";
+
+$green-1: #F1FFDD;
+$green-2: #8DCA38;
+$green-3: #6A9A28;
+$red-1: #FFDDDD;
+$red-2: #CA3838;
+
+body {
+    height: 100vh;
+    font-family: "Arial Narrow", sans-serif;
+    line-height: 1.25;
+}
+
+.root {
+    display: grid;
+    grid-template-areas: "menu content chat";
+    grid-template-columns: 1fr 6fr 2fr;
+    grid-column-gap: 0.5%;
+    height: 100%;
+}
+
+.menu {
+    grid-area: menu;
+    background-color: $green-1;
+    padding: 1rem;
+    font-size: 1.1rem;
+
+    .menu-item {
+        padding: 0.3rem;
+    }
+}
+
+.content {
+    grid-area: content;
+
+    .header {
+        background-color: $green-2;
+        padding: 0.2rem 0.5rem;
+        border-bottom: 2px solid $green-3;
+        font-size: 1.2rem;
+        color: white;
+        
+        a:hover {
+            text-decoration: underline;
+        }
+    }
+
+    .system-messages {
+
+        .system-message {
+            margin: 0.5rem 0;
+            border: 2px solid $green-1;
+            padding: 0.3rem 1rem;
+
+            .system-message-close {
+                float: right;
+                font-size: 1.2rem;
+                cursor: pointer;
+            }
+        }
+
+        .error {
+            border: 2px solid $red-1;
+        }
+    }
+
+    .manage-panel {
+        width: 100%;
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: 15%;
+        grid-column-gap: 3%;
+        justify-content: center;
+        margin: 1rem 0;
+    }
+
+    .board {
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(auto, 25%);
+        grid-column-gap: 0.5%;
+        justify-content: center;
+        margin-bottom: 0.5rem;
+
+        .column {
+            .column-wrapper {
+                background-color: $green-2;
+                padding: 0 2px 2px 2px;
+
+                .column-title {
+                    font-size: 1.2rem;
+                    padding: 0.1rem 1.5rem;
+                    text-align: center;
+                    color: white;
+                }
+
+                .task {
+                    margin: 2px 0;
+
+                    &:first-child {
+                        border-top: 2px solid $green-1;
+                    }
+
+                    .task-title {
+                        padding: 0 0.5rem;
+                        font-weight: 600;
+                        background-color: $green-1;
+                    }
+
+                    .task-desc {
+                        padding: 0.2rem;
+                        background-color: white;
+
+                        &:empty {
+                            padding: 0;
+                        }
+                    }
+
+                    .task-performer {
+                        padding: 0 0.2rem;
+                        text-align: right;
+                        background-color: $green-1;
+
+                        .task-performer-name {
+                            font-weight: 600;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .summary {
+        display: grid;
+        grid-template-areas: "project-list profile-info";
+        grid-column-gap: 1%;
+        padding: 1rem;
+
+        .project-list {
+            grid-area: project-list;
+
+            li {
+                font-size: 1.1rem;
+                margin: 0.2rem 0;
+            }
+
+            p {
+                margin: 0.3rem 0;
+            }
+        }
+
+        .profile-info {
+            grid-area: profile-info;
+
+            .profile-avatar { // TODO: Remove mock
+                height: 100px;
+                width: 100px;
+                background-color: grey;
+            }
+        }
+    }
+
+    .form {
+        padding: 1rem;
+        width: 50%;
+        margin: 0 auto;
+
+        .extra-text {
+            margin-bottom: 1rem;
+        }
+
+        form {
+
+            p {
+                justify-content: center;
+                margin: 1rem 0;
+                display: grid;
+                grid-auto-flow: column;
+                grid-template-columns: 1fr 2fr;
+            }
+
+            .extra-buttons {
+                float: right;
+            }
+        }
+    }
+}
+
+.chat {
+    grid-area: chat;
+    background-color: $green-1;
+
+    .chat-wrapper {
+        position: fixed;
+        padding: 0 0.5rem;
+        display: grid;
+        grid-template-areas:
+                "list"
+                "input";
+        grid-template-rows: 1fr auto;
+        grid-row-gap: 1rem;
+        height: 100vh;
+        width: 21%;
+
+        .message-list {
+            margin-top: 0.5rem;
+            grid-area: list;
+            display: flex;
+            flex-direction: column-reverse;
+            overflow-y: hidden;
+
+            &:hover {
+                overflow-y: overlay;
+            }
+
+            .message {
+                background-color: white;
+                margin-top: 0.5rem;
+                padding: 0.5rem 1rem 0.5rem 0.5rem;
+
+                .message-info {
+                    margin-bottom: 0.2rem;
+                    font-weight: 600;
+                }
+            }
+        }
+
+        .chat-input {
+            grid-area: input;
+            margin-bottom: 0.5rem;
+
+            textarea {
+                resize: none;
+                width: 100%;
+                box-sizing: border-box;
+                border: none;
+                padding: 0.5rem;
+
+                &:focus {
+                    outline: 1px solid $green-2;
+                }
+            }
+
+            #send-message-button {
+                font-size: 1rem;
+                padding: 0.1rem;
+                margin: 0;
+            }
+        }
+    }
+}
+
+.clickable:hover {
+    color: white;
+    background-color: $green-2 !important;
+    cursor: pointer;
+}
+
+.clickable-warning:hover {
+    @extend .clickable;
+    background-color: $red-2 !important;
+}
+
+.button {
+    font-size: 1.2rem;
+    padding: 0.5rem 1rem;
+    background-color: $green-1;
+    text-align: center;
+}
+
+.link-like {
+    color: darkcyan;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.section-title {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+textarea {
+    resize: vertical;
+    padding: 0.3rem;
+}
+
+input {
+    padding: 0.1rem;
+}

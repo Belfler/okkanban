@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load tags %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block navigation %}
+{% navigation %}
+{% endblock %}
+
+{% block content %}
+<div class="form">
+    <h2 class="section-title">{{ page_title }}</h2>
+    {% if extra_text %}<p class="extra-text">{{ extra_text }}</p>{% endif %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="button clickable{% if main_button.is_warning %}-warning{% endif %}" type="submit">{{ main_button.text }}</button>
+        {% if extra_buttons %}
+        <div class="extra-buttons">
+        {% for button in extra_buttons %}
+        <a href="{{ button.url }}">
+            <button class="button clickable{% if button.is_warning %}-warning{% endif %}" type="button">{{ button.text }}</button>
+        </a>
+        {% endfor %}
+        </div>
+        {% endif %}
+    </form>
+</div>
+{% endblock %}
+
+{% block chat %}
+{% if project_pk %}
+{% chat project_pk %}
+{% endif %}
+{% endblock %}

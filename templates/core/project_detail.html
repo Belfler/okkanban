@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load tags %}
+{% load humanize %}
+
+{% block title %}"{{ project.title }}"{% endblock %}
+
+{% block navigation %}
+{% navigation %}
+{% endblock %}
+
+{% block content %}
+<div class="manage-panel">
+    {% if is_admin %}
+    <a href="{% url 'core:column_creation' project_pk %}"><div class="button clickable">Create Column</div></a>
+    {% endif %}
+    <a href="{% url 'core:task_creation' project_pk %}"><div class="button clickable">Add Task</div></a>
+    <a href="{% url 'core:invite_person' project_pk %}"><div class="button clickable">Invite Person</div></a>
+    {% if is_admin %}
+        <a href="{% url 'core:project_settings' project_pk %}"><div class="button clickable">Settings</div></a>
+    {% endif %}
+</div>
+
+<div class="board">
+    {% for column in project.columns.all %}
+        <div class="column"><div class="column-wrapper">
+            {% if is_admin %}
+            <a href="{% url 'core:column_change' project_pk column.pk %}"><div class="column-title clickable">{{ column.title }}</div></a>
+            {% else %}
+            <div class="column-title">{{ column.title }}</div>
+            {% endif %}
+            <div class="column-body">
+                {% for task in column.tasks.all %}
+                    <div class="task">
+                        <a href="{% url 'core:task_change' project_pk task.pk %}"><div class="clickable task-title">{{ task.title }}</div></a>
+                        <div class="task-desc">{{ task.description|linebreaksbr }}</div>
+                        {% if task.performer %}
+                        <div class="task-performer">Performer: <span class="task-performer-name">{{ task.performer.get_full_name }}</span></div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+    </div></div>
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block chat %}
+    {% chat project_pk %}
+{% endblock %}

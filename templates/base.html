@@ -1,0 +1,43 @@
+{% load static %}
+{% load tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>{% block title %}{% endblock %} | OkKanban</title>
+</head>
+<body>
+<div class="root">
+
+    <div class="menu">
+        {% menu %}
+    </div>
+
+    <div class="content">
+        <div class="header">{% block navigation %}{% endblock %}</div>
+        {% if messages %}
+        <div class="system-messages">
+            {% for message in messages %}
+                <div class="system-message {{ message.tags }}">
+                    <span class="system-message-text">{{ message }}</span>
+                    <span class="system-message-close" onclick="this.parentNode.remove()">&times;</span>
+                </div>
+            {% endfor %}
+
+        </div>
+        {% endif %}
+        {% block content %}{% endblock %}
+    </div>
+
+    <div class="chat">
+        <div class="chat-wrapper">
+            {% block chat %}{% endblock %}
+        </div>
+    </div>
+
+</div>
+</body>
+<script src="{% static 'js/script.js' %}"></script>
+</html>

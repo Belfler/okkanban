@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load tags %}
+
+{% block title %}Summary{% endblock %}
+
+{% block navigation %}
+{% navigation %}
+{% endblock %}
+
+{% block content %}
+<div class="summary">
+    <div class="project-list">
+        <h2 class="section-title">Your Projects</h2>
+        {% if user.projects_as_participant.all %}
+            <ul>
+            {% for project in user.projects_as_participant.all %}
+            <li><a class="project-title link-like" href="{% url 'core:project_detail' project.id %}">{{ project.title }}</a></li>
+            {% endfor %}
+            </ul>
+            <p><a class="link-like" href="{% url 'core:project_creation' %}">Create new</a></p>
+        {% else %}
+            <span>You have no projects yet. <a class="link-like" href="{% url 'core:project_creation' %}">Create</a>.</span>
+        {% endif %}
+    </div>
+    <div class="profile-info">
+        <h2 class="section-title">Profile Information</h2>
+        <div class="profile-avatar"></div>
+        <span class="profile-name">{{ user.get_full_name }}</span>
+    </div>
+</div>
+{% endblock %}

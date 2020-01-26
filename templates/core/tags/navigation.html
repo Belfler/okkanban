@@ -1,0 +1,3 @@
+{% for link in links %}
+{% if not forloop.first %}>>{% endif %} <a href="{{ link.url }}">{{ link.text }}</a>
+{% endfor %}
