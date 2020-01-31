@@ -269,6 +269,9 @@ class JoiningProject(LoginRequiredMixin, View):
     project_pk_url_kwarg = 'project_pk'
 
     def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('core:login')
+
         user_pk = request.user.pk
         project_pk = self.kwargs[self.project_pk_url_kwarg]
         redis_key = f'user:{user_pk}:project:{project_pk}'
