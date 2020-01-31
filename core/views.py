@@ -250,8 +250,8 @@ class Invitation(ProjectParticipationRequiredMixin, FormView):
             invited_user_pk = CustomUser.objects.get(email=email).pk
             project_pk = self.kwargs[self.project_pk_url_kwarg]
             redis_db.set(f'user:{invited_user_pk}:project:{project_pk}', uuid, ex=86400 * 3)
-            url_to_join = reverse('core:join_project',
-                                  kwargs={'project_pk': project_pk, 'uuid': uuid})
+            url_to_join = self.request.build_absolute_uri(reverse('core:join_project',
+                                                                  kwargs={'project_pk': project_pk, 'uuid': uuid}))
             send_mail('Invitation',
                       f'You are invited in the project "{Project.objects.get(pk=project_pk).title}". '
                       f'Click {url_to_join} to join.',
