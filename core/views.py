@@ -1,3 +1,4 @@
+import os
 from uuid import uuid4
 
 from redis import StrictRedis
@@ -11,7 +12,6 @@ from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy, reverse
 from django.core.mail import send_mail
 from django.shortcuts import redirect
-from django.conf import settings
 
 from core.mixins import (ProjectParticipationRequiredMixin, ColumnProcessMixin, TaskProcessMixin,
                          ProjectAdministrationRequiredMixin)
@@ -19,7 +19,7 @@ from core.models import CustomUser, Project
 from core.forms import ProjectForm, CustomUserCreationForm, InvitationForm
 from core.utils import Button
 
-redis_db = StrictRedis.from_url(settings.REDIS_URL, db=1, decode_responses=True)
+redis_db = StrictRedis.from_url(os.environ['REDIS_URL'], db=1, decode_responses=True)
 
 
 class Summary(LoginRequiredMixin, TemplateView):

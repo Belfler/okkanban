@@ -55,8 +55,6 @@ ASGI_APPLICATION = 'okkanban.routing.application'
 
 DATABASES = {'default': dj_database_url.config()}
 
-REDIS_URL = os.environ['REDIS_URL']
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -97,7 +95,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [REDIS_URL],
+            "hosts": [os.environ['REDIS_URL']],
         },
     },
 }
