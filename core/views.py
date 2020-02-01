@@ -255,7 +255,7 @@ class Invitation(ProjectParticipationRequiredMixin, FormView):
             send_mail('Invitation',
                       f'You are invited in the project "{Project.objects.get(pk=project_pk).title}". '
                       f'Click {url_to_join} to join.',
-                      'doousee@yandex.ru',
+                      os.environ['EMAIL_HOST_USER'],
                       [email])
             messages.success(self.request, 'The invitation has been successfully sent.')
 
