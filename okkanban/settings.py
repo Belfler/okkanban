@@ -55,7 +55,7 @@ WSGI_APPLICATION = 'okkanban.wsgi.application'
 
 ASGI_APPLICATION = 'okkanban.routing.application'
 
-DATABASES = {'default': dj_database_url.config()}
+DATABASES = {'default': dj_database_url.config(env='DATABASE_URL')}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
