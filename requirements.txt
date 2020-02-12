@@ -5,3 +5,4 @@ channels-redis~=2.4
 daphne
 dj-config-url
 python-dotenv
+asgiref
