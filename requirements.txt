@@ -6,3 +6,4 @@ daphne
 dj-config-url
 python-dotenv
 asgiref
+celery
