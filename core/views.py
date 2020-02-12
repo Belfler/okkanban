@@ -10,13 +10,13 @@ from django.views import View
 from django.views.generic import TemplateView, DetailView, CreateView, FormView
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy, reverse
-from django.core.mail import send_mail
 from django.shortcuts import redirect
 
 from core.mixins import (ProjectParticipationRequiredMixin, ColumnProcessMixin, TaskProcessMixin,
                          ProjectAdministrationRequiredMixin)
 from core.models import CustomUser, Project
 from core.forms import ProjectForm, CustomUserCreationForm, InvitationForm
+from core.tasks import send_mail_async
 from core.utils import Button
 
 redis_db = StrictRedis.from_url(os.environ['REDIS_URL'], db=1, decode_responses=True)
@@ -252,11 +252,13 @@ class Invitation(ProjectParticipationRequiredMixin, FormView):
             redis_db.set(f'user:{invited_user_pk}:project:{project_pk}', uuid, ex=86400 * 3)
             url_to_join = self.request.build_absolute_uri(reverse('core:join_project',
                                                                   kwargs={'project_pk': project_pk, 'uuid': uuid}))
-            send_mail('Invitation',
-                      f'You are invited in the project "{Project.objects.get(pk=project_pk).title}". '
-                      f'Click {url_to_join} to join.',
-                      os.environ['EMAIL_HOST_USER'],
-                      [email])
+            send_mail_async.delay(
+                'Invitation',
+                f'You are invited in the project "{Project.objects.get(pk=project_pk).title}". '
+                f'Click {url_to_join} to join.',
+                os.environ['EMAIL_HOST_USER'],
+                [email]
+            )
             messages.success(self.request, 'The invitation has been successfully sent.')
 
         return super(Invitation, self).form_valid(form)
