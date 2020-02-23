@@ -236,4 +236,9 @@ input {
   padding: 0.1rem;
 }
 
+.text-in-center {
+  margin: 2rem 0;
+  text-align: center;
+}
+
 /*# sourceMappingURL=style.css.map */
