@@ -1,7 +1,6 @@
 import os
 import pathlib
 
-import dj_database_url
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -58,7 +57,16 @@ WSGI_APPLICATION = 'okkanban.wsgi.application'
 
 ASGI_APPLICATION = 'okkanban.routing.application'
 
-DATABASES = {'default': dj_database_url.config(env='DATABASE_URL')}
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ['POSTGRES_DB'],
+        'USER': os.environ['POSTGRES_USER'],
+        'PASSWORD': os.environ['POSTGRES_PASSWORD'],
+        'HOST': os.environ['POSTGRES_HOST'],
+        'PORT': os.environ['POSTGRES_PORT'],
+    }
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
