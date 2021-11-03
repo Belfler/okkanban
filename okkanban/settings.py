@@ -7,7 +7,7 @@ load_dotenv()
 
 BASE_DIR = pathlib.Path(__file__).parents[1]
 
-DEBUG = False
+DEBUG = bool(os.environ.get('DEBUG', 0))
 
 SECRET_KEY = os.environ['SECRET_KEY']
 
@@ -85,7 +85,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Europe/Moscow'
+TIME_ZONE = os.environ.get('TIME_ZONE', 'UTC')
 
 USE_I18N = False
 
@@ -115,8 +115,8 @@ CHANNEL_LAYERS = {
     },
 }
 
-EMAIL_HOST = 'smtp.yandex.ru'
-EMAIL_PORT = 465
+EMAIL_HOST = os.environ['EMAIL_HOST']
+EMAIL_PORT = os.environ['EMAIL_PORT']
 EMAIL_USE_SSL = True
 EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
 EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
