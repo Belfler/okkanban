@@ -1,14 +1,13 @@
 import os
 import pathlib
 
-import dj_database_url
 from dotenv import load_dotenv
 
 load_dotenv()
 
 BASE_DIR = pathlib.Path(__file__).parents[1]
 
-DEBUG = False
+DEBUG = bool(os.environ.get('DEBUG', 0))
 
 SECRET_KEY = os.environ['SECRET_KEY']
 
@@ -58,7 +57,16 @@ WSGI_APPLICATION = 'okkanban.wsgi.application'
 
 ASGI_APPLICATION = 'okkanban.routing.application'
 
-DATABASES = {'default': dj_database_url.config(env='DATABASE_URL')}
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ['POSTGRES_DB'],
+        'USER': os.environ['POSTGRES_USER'],
+        'PASSWORD': os.environ['POSTGRES_PASSWORD'],
+        'HOST': os.environ['POSTGRES_HOST'],
+        'PORT': os.environ['POSTGRES_PORT'],
+    }
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -77,7 +85,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Europe/Moscow'
+TIME_ZONE = os.environ.get('TIME_ZONE', 'UTC')
 
 USE_I18N = False
 
@@ -88,6 +96,10 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATIC_ROOT = BASE_DIR / 'static'
+
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = BASE_DIR / 'media'
 
 AUTH_USER_MODEL = 'core.CustomUser'
 
@@ -107,8 +119,8 @@ CHANNEL_LAYERS = {
     },
 }
 
-EMAIL_HOST = 'smtp.yandex.ru'
-EMAIL_PORT = 465
+EMAIL_HOST = os.environ['EMAIL_HOST']
+EMAIL_PORT = os.environ['EMAIL_PORT']
 EMAIL_USE_SSL = True
 EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
 EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']

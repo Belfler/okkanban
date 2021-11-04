@@ -1,0 +1,9 @@
+.git/
+venv/
+.idea/
+etc/
+example.env
+.gitignore
+docker-compose.yml
+Dockerfile
+*.md

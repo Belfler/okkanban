@@ -1,0 +1,80 @@
+version: "3"
+
+services:
+
+  postgres:
+    image: postgres:13.4
+    volumes:
+      - data:/var/lib/postgresql/data
+    expose:
+      - "5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    restart: on-failure:3
+
+# In case of using several `django` container instances, we should not migrate
+# within each one, so we use separate container to migrate.
+  django_migrate:
+    build: .
+    entrypoint: python manage.py
+    command: migrate --no-input
+    depends_on:
+      - postgres
+
+  django_collectstatic:
+    build: .
+    entrypoint: python manage.py
+    command: collectstatic --no-input --clear
+    volumes:
+      - static:/code/static
+
+  django:
+    build: .
+    command: daphne -b 0.0.0.0 -p 8000 okkanban.asgi:application
+    volumes:
+      - .:/code
+    expose:
+      - "8000"
+    depends_on:
+      - django_migrate
+      - postgres
+      - redis
+    restart: on-failure:3
+
+  redis:
+    image: redis:6.2
+    volumes:
+      - data:/data
+    expose:
+      - "6379"
+    restart: on-failure:3
+
+  celery:
+    build: .
+    command: celery -A okkanban worker -l INFO
+    depends_on:
+      - redis
+      - postgres
+    restart: on-failure:3
+
+  nginx:
+    image: nginx:1.21
+    volumes:
+      - ./etc/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - static:/static
+      - media:/media
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      TZ: ${TZ}
+    depends_on:
+      - django
+    restart: on-failure:3
+
+volumes:
+  data:
+  static:
+  media:

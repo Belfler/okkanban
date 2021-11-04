@@ -8,7 +8,7 @@ from core.consumers import ChatConsumer
 application = ProtocolTypeRouter({
     'websocket': AuthMiddlewareStack(
         URLRouter([
-            path('ws/projects/<int:project_pk>/chat/', ChatConsumer),
+            path('ws/projects/<int:project_pk>/chat/', ChatConsumer.as_asgi()),
         ])
     ),
 })
